@@ -7,7 +7,6 @@ import java.util.List;
 public class UserDTO implements Serializable{
 
     private static final long serialVersionUID = 4545864587995944260L;
-    private static int nextUserID = 1;
     private int	userId;
     private String userName;
     private String ini;
@@ -24,10 +23,6 @@ public class UserDTO implements Serializable{
     }
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-    public void createNewUserId(){
-        this.userId = nextUserID;
-        nextUserID++;
     }
     public String getUserName() {
         return userName;

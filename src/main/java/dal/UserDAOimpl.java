@@ -8,7 +8,21 @@ import java.util.List;
 import java.sql.*;
 
 public class UserDAOimpl implements IUserDAO {
+    int nextUserID;
 
+    public UserDAOimpl(){
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185118?"
+                + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT nextUserID FROM static_nextUserID");
+            resultSet.next();
+            nextUserID = resultSet.getInt("nextUserID");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public UserDTO getUser(int userId) throws DALException{
         UserDTO newUser = new UserDTO();

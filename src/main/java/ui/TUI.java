@@ -4,12 +4,11 @@ import dal.IUserDAO;
 import dal.UserDAOimpl;
 import dto.UserDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class TUI {
-    IUserDAO userDAO;
+    private IUserDAO userDAO;
     private Scanner sc;
 
     public TUI(){
@@ -76,7 +75,7 @@ public class TUI {
     private UserDTO createUserDTO(){
         UserDTO newUser = new UserDTO();
 
-        newUser.createNewUserId();
+        //newUser.createNewUserId();
         System.out.println("User gets ID: " + newUser.getUserId());
 
         System.out.println("Name:");
