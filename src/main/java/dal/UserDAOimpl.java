@@ -135,7 +135,7 @@ public class UserDAOimpl implements IUserDAO {
 
         String roles = resultSet.getString("roles");
         roles = formatRoles(roles);
-        List<String> rolesArray = Arrays.asList(roles.split(", "));
+        List<String> rolesArray = new ArrayList<>(Arrays.asList(roles.split(", ")));
         newUser.setRoles(rolesArray);
 
         return newUser;
