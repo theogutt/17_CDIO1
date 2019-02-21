@@ -75,17 +75,18 @@ public class TUI {
     private UserDTO createUserDTO(){
         UserDTO newUser = new UserDTO();
 
-        //newUser.createNewUserId();
-        System.out.println("User gets ID: " + newUser.getUserId());
-
         System.out.println("Name:");
         newUser.setUserName(sc.next());
 
         System.out.println("Initials:");
         newUser.setIni(sc.next());
 
-        System.out.println("CPR:");
-        newUser.setCpr(sc.next());
+        System.out.println("CPR (form: xxxxxx-xxxx):");
+        String cpr;
+        do {
+            cpr = sc.next();
+            newUser.setCpr(cpr);
+        } while(!cpr.matches("\\d{6}-\\d{4}"));
 
         System.out.println("Password:");
         newUser.setPassword(sc.next());
