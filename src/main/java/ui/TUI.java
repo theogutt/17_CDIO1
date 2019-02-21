@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TUI {
+    private Scanner sc;
+
+    public TUI(){
+        sc = new Scanner(System.in);
+    }
+
     public void run() throws IUserDAO.DALException {
         IUserDAO userDAO = new UserDAOimpl();
-
-        Scanner sc = new Scanner(System.in);
         String choice;
-
 
         do {
             System.out.println("Muligheder:\n"
@@ -41,12 +44,12 @@ public class TUI {
                     break;
 
                 case "3": // Opret bruger
-                    userDAO.createUser(createUserDTO(sc));
+                    userDAO.createUser(createUserDTO());
                     System.out.println("Done...");
                     break;
 
                 case "4": // Opdater bruger
-                    userDAO.updateUser(createUserDTO(sc));
+                    userDAO.updateUser(createUserDTO());
                     System.out.println("Done...");
                     break;
 
@@ -67,7 +70,7 @@ public class TUI {
         System.exit(0);
     }
 
-    public static UserDTO createUserDTO(Scanner sc){
+    private UserDTO createUserDTO(){
         UserDTO newUser = new UserDTO();
         System.out.println("ID:");
         newUser.setUserId(sc.nextInt());
@@ -94,4 +97,11 @@ public class TUI {
 
         return newUser;
     }
+
+    private UserDTO updateUser(){
+        UserDTO newUser = new UserDTO();
+
+        return newUser;
+    }
+
 }
