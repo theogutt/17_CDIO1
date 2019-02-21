@@ -8,21 +8,6 @@ import java.util.List;
 import java.sql.*;
 
 public class UserDAOimpl implements IUserDAO {
-    int nextUserID;
-
-    public UserDAOimpl(){
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185118?"
-                + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
-            Statement statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery("SELECT nextUserID FROM static_nextUserID");
-            resultSet.next();
-            nextUserID = resultSet.getInt("nextUserID");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public UserDTO getUser(int userId) throws DALException{
         UserDTO newUser = new UserDTO();
@@ -70,19 +55,10 @@ public class UserDAOimpl implements IUserDAO {
             Statement statement = connection.createStatement();
 
             String query = String.format("INSERT INTO users VALUES (%d, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
-                    user.getUserId(), user.getUserName(), user.getIni(), user.getCpr(), user.getPassword(), formatRoles(user.getRoles().toString()));
+                    getNextUserID(statement), user.getUserName(), user.getIni(), user.getCpr(), user.getPassword(), formatRoles(user.getRoles().toString()));
 
             statement.executeUpdate(query);
 
-            /*
-            "INSERT INTO users VALUES ("
-                    + user.getUserId() + ","
-                    + "'" + user.getUserName() + "'" + ","
-                    + "'" + user.getIni() + "'" + ","
-                    + "'" + user.getCpr() + "'" + ","
-                    + "'" + user.getPassword() + "'" + ","
-                    + "'" + formatRoles(user.getRoles().toString()) + "'" + ")"
-             */
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,16 +74,6 @@ public class UserDAOimpl implements IUserDAO {
                     user.getUserName(), user.getIni(), user.getCpr(), user.getPassword(), formatRoles(user.getRoles().toString()), user.getUserId());
 
             statement.executeUpdate(query);
-
-            /*
-            "UPDATE users SET "
-                    + "userName = " + user.getUserName() + ","
-                    + "ini = " + user.getIni() + ","
-                    + "cpr = " + user.getCpr() + ","
-                    + "pass = " + user.getPassword() + ","
-                    + "roles = " + formatRoles(user.getRoles().toString())
-                    + " WHERE userID = " + user.getUserId()
-             */
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -155,11 +121,23 @@ public class UserDAOimpl implements IUserDAO {
         return newUser;
     }
 
+    // Fjerner [ og ] fra den givne String. Brugt på ArrayLister i String form.
     private String formatRoles(String roles){
         String newRoles;
         newRoles = roles.replaceAll("\\[", "");
         newRoles = newRoles.replaceAll("]","");
 
         return newRoles;
+    }
+
+    // Finder det næste unikke userID fra nextUserID tabellen i database
+    private int getNextUserID(Statement statement) throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT nextUserID FROM static_nextUserID");
+        resultSet.next();
+        int nextUserID = resultSet.getInt("nextUserID");
+
+        statement.executeUpdate("UPDATE static_nextUserID SET nextUserID = nextUserID+1;");
+
+        return nextUserID;
     }
 }
