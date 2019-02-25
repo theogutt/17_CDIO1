@@ -41,7 +41,6 @@ public class TUI {
                     } catch(IUserDAO.DALException e){
                         System.out.println(e.getMessage());
                     }
-                    System.out.println("Done...");
                     break;
 
                 case 2: // Vis alle brugere
@@ -49,12 +48,10 @@ public class TUI {
                     for (int n=0 ; n < userlist.size() ; n++)
                         System.out.println(userlist.get(n));
                     sc.nextLine();
-                    System.out.println("Done...");
                     break;
 
                 case 3: // Opret bruger
                     userDAO.createUser(createUserDTO());
-                    System.out.println("Done...");
                     break;
 
                 case 4: // Opdater bruger
@@ -63,19 +60,18 @@ public class TUI {
                     } catch (IUserDAO.DALException e){
                         System.out.println(e.getMessage());
                     }
-                    System.out.println("Done...");
                     break;
 
                 case 5: // Slet bruger
                     System.out.println("Write userID:");
                     userDAO.deleteUser(sc.nextInt());
-                    System.out.println("Done...");
                     break;
 
                 case 6:
                     break;
             }
 
+            System.out.println("Press ENTER to continue");
             stop.nextLine();
 
         } while (choice != 6);
