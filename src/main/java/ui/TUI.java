@@ -10,9 +10,11 @@ import java.util.Scanner;
 public class TUI {
     private IUserDAO userDAO;
     private Scanner sc;
+    private Scanner stop;
 
     public TUI(){
         sc = new Scanner(System.in);
+        stop = new Scanner(System.in);
         userDAO = new UserDAOimpl();
     }
 
@@ -34,7 +36,11 @@ public class TUI {
             switch (choice){
                 case 1: // Vis bruger
                     System.out.println("Write userID:");
-                    System.out.println(userDAO.getUser(sc.nextInt()));
+                    try {
+                        System.out.println(userDAO.getUser(sc.nextInt()));
+                    } catch(IUserDAO.DALException e){
+                        System.out.println(e.getMessage());
+                    }
                     System.out.println("Done...");
                     break;
 
@@ -42,6 +48,7 @@ public class TUI {
                     List<UserDTO> userlist = userDAO.getUserList();
                     for (int n=0 ; n < userlist.size() ; n++)
                         System.out.println(userlist.get(n));
+                    sc.nextLine();
                     System.out.println("Done...");
                     break;
 
@@ -51,7 +58,11 @@ public class TUI {
                     break;
 
                 case 4: // Opdater bruger
-                    userDAO.updateUser(updateUser());
+                    try {
+                        userDAO.updateUser(updateUser());
+                    } catch (IUserDAO.DALException e){
+                        System.out.println(e.getMessage());
+                    }
                     System.out.println("Done...");
                     break;
 
@@ -65,7 +76,7 @@ public class TUI {
                     break;
             }
 
-            sc.nextLine();
+            stop.nextLine();
 
         } while (choice != 6);
         System.out.println("...Program closed");

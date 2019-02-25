@@ -20,7 +20,7 @@ public class UserDAOimpl implements IUserDAO {
             newUser = createUserDTO(resultSet);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DALException("No user exists with given ID");
         }
 
         //System.out.println(newUser);
