@@ -32,7 +32,7 @@ public class PasswordGenerator {
     }
     public static String password(){
         Random r = new Random();
-        int længde = r.nextInt(30 - 20) + 20;
+        int længde = r.nextInt(13 - 11) + 11;
         String password = "";
         for(int i=0; i<længde-1; i++){
             password+=characterGenerator(længde);
