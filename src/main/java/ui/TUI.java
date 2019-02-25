@@ -134,8 +134,12 @@ public class TUI {
                     break;
 
                 case 3:
-                    System.out.println("New CPR:\n");
-                    chosenUser.setCpr(sc.next());
+                    System.out.println("New CPR (form: xxxxxx-xxxx):\n");
+                    String cpr;
+                    do {
+                        cpr = sc.next();
+                        chosenUser.setCpr(cpr);
+                    } while(!cpr.matches("\\d{6}-\\d{4}"));
                     break;
 
                 case 4:
