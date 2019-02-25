@@ -5,6 +5,7 @@ import dal.IUserDAO;
 import dal.UserDAOimpl;
 import dto.UserDTO;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class TUI {
 
     public void run() throws IUserDAO.DALException {
         IUserDAO userDAO = new UserDAOimpl();
-        int choice;
+        String choice;
         do {
             System.out.println("Menu:\n"
                     + "1. Show user\n"
@@ -31,49 +32,57 @@ public class TUI {
                     + "5. Delete user\n"
                     + "6. Close program\n");
 
-            choice = sc.nextInt();
+            choice = sc.nextLine();
 
             switch (choice) {
-                case 1: // Vis bruger
+                case "1": // Vis bruger
                     System.out.println("Write userID:");
                     try {
                         System.out.println(userDAO.getUser(sc.nextInt()));
                     } catch (IUserDAO.DALException e) {
                         System.out.println(e.getMessage());
+                    } catch (InputMismatchException e){
+                        System.out.println("Not valid userID");
                     }
                     break;
 
-                case 2: // Vis alle brugere
+                case "2": // Vis alle brugere
                     List<UserDTO> userlist = userDAO.getUserList();
                     for (int n = 0; n < userlist.size(); n++)
                         System.out.println(userlist.get(n));
                     break;
 
-                case 3: // Opret bruger
+                case "3": // Opret bruger
                     userDAO.createUser(createUserDTO());
                     break;
 
-                case 4: // Opdater bruger
+                case "4": // Opdater bruger
                     try {
                         userDAO.updateUser(updateUser());
                     } catch (IUserDAO.DALException e) {
                         System.out.println(e.getMessage());
+                    } catch (InputMismatchException e){
+                        System.out.println("Not valid userID");
                     }
                     break;
 
-                case 5: // Slet bruger
+                case "5": // Slet bruger
                     System.out.println("Write userID:");
-                    userDAO.deleteUser(sc.nextInt());
+                    try {
+                        userDAO.deleteUser(sc.nextInt());
+                    } catch (InputMismatchException e){
+                        System.out.println("Not valid userID");
+                    }
                     break;
 
-                case 6:
+                case "6":
                     break;
             }
 
             System.out.println("Press ENTER to continue");
             stop.nextLine();
 
-        } while (choice != 6);
+        } while (!choice.equalsIgnoreCase("6"));
         System.out.println("...Program closed");
         System.exit(0);
     }
