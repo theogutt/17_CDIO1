@@ -11,16 +11,14 @@ import java.util.Scanner;
 
 public class TUI {
     private IUserDAO userDAO;
-    private Scanner sc;
-    private Scanner stop;
 
     public TUI() {
-        sc = new Scanner(System.in);
-        stop = new Scanner(System.in);
         userDAO = new UserDAOimpl();
     }
 
     public void run() throws IUserDAO.DALException {
+        Scanner sc = new Scanner(System.in);
+        Scanner stop = new Scanner(System.in);
         IUserDAO userDAO = new UserDAOimpl();
         String choice;
         do {
@@ -39,6 +37,7 @@ public class TUI {
                     System.out.println("Write userID:");
                     try {
                         System.out.println(userDAO.getUser(sc.nextInt()));
+                        sc.nextLine();
                     } catch (IUserDAO.DALException e) {
                         System.out.println(e.getMessage());
                     } catch (InputMismatchException e){
@@ -88,18 +87,19 @@ public class TUI {
     }
 
     private UserDTO createUserDTO() {
+        Scanner createScanner = new Scanner(System.in);
         UserDTO newUser = new UserDTO();
 
         System.out.println("Name:");
-        newUser.setUserName(sc.next());
+        newUser.setUserName(createScanner.next());
 
         System.out.println("Initials:");
-        newUser.setIni(sc.next());
+        newUser.setIni(createScanner.next());
 
         System.out.println("CPR (form: xxxxxx-xxxx):");
         String cpr;
         do {
-            cpr = sc.next();
+            cpr = createScanner.next();
             newUser.setCpr(cpr);
         } while (!cpr.matches("\\d{6}-\\d{4}"));
 
@@ -109,7 +109,7 @@ public class TUI {
         System.out.println("Roles (write STOP to stop):");
         String role;
         do {
-            role = sc.next();
+            role = createScanner.next();
             if (!role.equalsIgnoreCase("stop"))
                 newUser.addRole(role);
         } while (!role.equalsIgnoreCase("stop"));
@@ -118,11 +118,13 @@ public class TUI {
     }
 
     private UserDTO updateUser() throws IUserDAO.DALException {
+        Scanner updateScanner = new Scanner(System.in);
         UserDTO chosenUser;
-        int choice;
+        String choice;
 
         System.out.println("Write user ID for user you want to edit");
-        chosenUser = userDAO.getUser(sc.nextInt());
+        chosenUser = userDAO.getUser(updateScanner.nextInt());
+        updateScanner.nextLine();
 
         System.out.println("Chosen user: \n" + chosenUser);
 
@@ -135,61 +137,61 @@ public class TUI {
                     + "5. Roles\n"
                     + "6. Exit\n");
 
-            choice = sc.nextInt();
+            choice = updateScanner.nextLine();
 
             switch (choice) {
-                case 1:
+                case "1":
                     System.out.println("New name:\n");
-                    chosenUser.setUserName(sc.next());
+                    chosenUser.setUserName(updateScanner.next());
                     break;
 
-                case 2:
+                case "2":
                     System.out.println("New initials:\n");
-                    chosenUser.setIni(sc.next());
+                    chosenUser.setIni(updateScanner.next());
                     break;
 
-                case 3:
+                case "3":
                     System.out.println("New CPR (form: xxxxxx-xxxx):\n");
                     String cpr;
                     do {
-                        cpr = sc.next();
+                        cpr = updateScanner.next();
                         chosenUser.setCpr(cpr);
                     } while (!cpr.matches("\\d{6}-\\d{4}"));
                     break;
 
-                case 4:
+                case "4":
                     System.out.println("New password:\n");
-                    chosenUser.setPassword(sc.next());
+                    chosenUser.setPassword(updateScanner.next());
                     break;
 
-                case 5:
+                case "5":
                     List<String> roles = chosenUser.getRoles();
-                    int roleChoice;
+                    String roleChoice;
                     System.out.println("Add (1) or remove (2) roles? ");
                     System.out.println("Current roles: " + roles);
-                    roleChoice = sc.nextInt();
+                    roleChoice = updateScanner.nextLine();
                     switch (roleChoice) {
-                        case 1:
+                        case "1":
                             System.out.println("Write STOP to stop adding roles");
                             String addedRole;
                             do {
                                 for (String allRoles : roles)
                                     System.out.print(allRoles + ", ");
                                 System.out.println();
-                                addedRole = sc.next();
+                                addedRole = updateScanner.next();
                                 if (!addedRole.equalsIgnoreCase("stop"))
                                     chosenUser.addRole(addedRole);
                             } while (!addedRole.equalsIgnoreCase("stop"));
                             break;
 
-                        case 2:
+                        case "2":
                             String removeRole;
                             System.out.println("Which role should be removed (write STOP to stop)?");
                             do {
                                 for (String allRoles : roles)
                                     System.out.print(allRoles + ", ");
                                 System.out.println();
-                                removeRole = sc.next();
+                                removeRole = updateScanner.next();
                                 chosenUser.removeRole(removeRole);
                             } while (!removeRole.equalsIgnoreCase("stop"));
 
@@ -198,10 +200,10 @@ public class TUI {
 
                     break;
 
-                case 6:
+                case "6":
                     break;
             }
-        } while (choice != 6);
+        } while (!choice.equals("6"));
 
 
         return chosenUser;
