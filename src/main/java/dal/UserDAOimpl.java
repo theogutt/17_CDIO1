@@ -16,7 +16,7 @@ public class UserDAOimpl implements IUserDAO {
                 + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE userID = " + userId);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM cdio_users WHERE userID = " + userId);
             newUser = createUserDTO(resultSet);
 
         } catch (SQLException e) {
@@ -34,7 +34,7 @@ public class UserDAOimpl implements IUserDAO {
                 + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users ORDER BY userID");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM cdio_users ORDER BY userID");
 
             while(!resultSet.isLast()){
                 userList.add(createUserDTO(resultSet));
@@ -54,7 +54,7 @@ public class UserDAOimpl implements IUserDAO {
                 + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
             Statement statement = connection.createStatement();
 
-            String query = String.format("INSERT INTO users VALUES (%d, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
+            String query = String.format("INSERT INTO cdio_users VALUES (%d, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")",
                     getNextUserID(statement), user.getUserName(), user.getIni(), user.getCpr(), user.getPassword(), formatRoles(user.getRoles().toString()));
 
             statement.executeUpdate(query);
@@ -70,7 +70,7 @@ public class UserDAOimpl implements IUserDAO {
                 + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
             Statement statement = connection.createStatement();
 
-            String query = String.format("UPDATE users SET userName = \"%s\", ini = \"%s\", cpr = \"%s\", pass = \"%s\", roles = \"%s\" WHERE userID = %d",
+            String query = String.format("UPDATE cdio_users SET userName = \"%s\", ini = \"%s\", cpr = \"%s\", pass = \"%s\", roles = \"%s\" WHERE userID = %d",
                     user.getUserName(), user.getIni(), user.getCpr(), user.getPassword(), formatRoles(user.getRoles().toString()), user.getUserId());
 
             statement.executeUpdate(query);
@@ -86,7 +86,7 @@ public class UserDAOimpl implements IUserDAO {
                 + "user=s185118&password=SNX64wUCCqEHKNVwEwumg")){
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("DELETE FROM users WHERE userID = " + userId);
+            statement.executeUpdate("DELETE FROM cdio_users WHERE userID = " + userId);
 
         } catch (SQLException e) {
             e.printStackTrace();

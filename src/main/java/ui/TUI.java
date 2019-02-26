@@ -37,11 +37,12 @@ public class TUI {
                     System.out.println("Write userID:");
                     try {
                         System.out.println(userDAO.getUser(sc.nextInt()));
-                        sc.nextLine();
                     } catch (IUserDAO.DALException e) {
                         System.out.println(e.getMessage());
                     } catch (InputMismatchException e){
                         System.out.println("Not valid userID");
+                    } finally{
+                        sc.nextLine();
                     }
                     break;
 
@@ -71,6 +72,8 @@ public class TUI {
                         userDAO.deleteUser(sc.nextInt());
                     } catch (InputMismatchException e){
                         System.out.println("Not valid userID");
+                    } finally {
+                        sc.nextLine();
                     }
                     break;
 
